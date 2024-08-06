@@ -185,7 +185,7 @@ def main():
     beta = 0.5 #задается
     lambda_ = 0.5 #задается
 
-    variants = [generate_positive_definite_matrix(N) for _ in range(num_variants)]
+    variants = [generate_positive_definite_matrix(N) for i in range(num_variants)]
     solutions = []
 
     for W in variants:
