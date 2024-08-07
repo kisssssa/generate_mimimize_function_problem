@@ -80,29 +80,27 @@ def create_latex_table(W):
     latex = "\\begin{equation}\n"
     latex += "f_0(x_1, x_2, \\ldots, x_n) = "
 
-    terms = []
+    terms = defaultdict(int)
     for i in range(N):
-        for j in range(i, N):
+        for j in range(N):
             coef = W[i, j]
             if coef != 0:
                 if i == j:
-                    if coef == 1:
-                        term = f"x_{i + 1}^2"
-                    elif coef == -1:
-                        term = f"-x_{i + 1}^2"
-                    else:
-                        term = f"{coef} x_{i + 1}^2"
+                    term = f"x_{i + 1}^2"
                 else:
-                    if coef == 1:
-                        term = f"x_{i + 1} x_{j + 1}"
-                    elif coef == -1:
-                        term = f"-x_{i + 1} x_{j + 1}"
-                    else:
-                        term = f"{coef} x_{i + 1} x_{j + 1}"
-                terms.append(term)
+                    term = f"x_{min(i, j) + 1} x_{max(i, j) + 1}"
+                terms[term] += coef
 
+    formatted_terms = []
+    for term, coef in terms.items():
+        if coef == 1:
+            formatted_terms.append(f"{term}")
+        elif coef == -1:
+            formatted_terms.append(f"-{term}")
+        else:
+            formatted_terms.append(f"{coef} {term}")
 
-    latex += " + ".join(terms).replace(' + -', ' - ')
+    latex += " + ".join(formatted_terms).replace(' + -', ' - ')
     latex += "\n\\end{equation}\n"
 
     return latex
